@@ -1,9 +1,18 @@
 # Medkollega Communication Platform
 
-A full-stack web application for healthcare professionals to coordinate around patients. The platform combines secure, patient-centered messaging with lightweight documentation so clinicians can track notes, diagnoses, and medications while collaborating across teams.
+Medkollega is a full-stack web application for healthcare professionals to coordinate around patients. The frontend centers on fast access to patient context, streamlined documentation, and secure clinician-to-clinician communication.
 
 ## Project description
 Medkollega is designed to streamline interdisciplinary communication in clinical settings. It provides patient records, 1:1 and group chats, and structured documentation entries so medical colleagues can share updates in context and keep care plans aligned.
+
+## Frontend highlights
+- **Angular 19 UI architecture** with feature-driven components for patient workflows, chat, and account management.
+- **Responsive layout** built with a hybrid utility/semantic approach (Tailwind CSS).
+- **Workflow-centric UX**: patient overview, 1:1 and group chat threads, and structured documentation panels.
+- **Secure authentication flows** using JWT-based session handling.
+
+## Product overview
+Medkollega streamlines interdisciplinary communication in clinical settings. It provides patient records, secure messaging, and structured documentation entries so medical colleagues can share updates in context and keep care plans aligned.
 
 ## Key capabilities
 - Patient management (create, update, list, and search patient records).
@@ -13,7 +22,7 @@ Medkollega is designed to streamline interdisciplinary communication in clinical
 - JWT-based authentication and user context handling.
 
 ## Tech stack
-**Frontend:** Angular 19, Bootstrap 5, Tailwind CSS.
+**Frontend:** Angular 19, Tailwind CSS.
 **Backend:** Spring Boot (Java), H2 database, JWT security.
 
 ## Repository structure
@@ -61,4 +70,4 @@ The frontend runs on `http://localhost:4200` by default.
 3. Open a pull request with a clear description.
 
 ## License
-- this project is currently distributed under the MIT liscense.
+this project is currently distributed under the MIT liscense.
