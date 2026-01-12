@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-4 h-full">
+
+  <div class="flex items-center justify-between">
+    <h2 class="font-semibold text-lg ml-10">PDF-Befunde</h2>
+
+    <label class="px-4 py-2 bg-[#2D6A6A] text-white rounded-lg cursor-pointer hover:bg-[#245757]">
+      PDF hochladen
+      <input type="file"
+             accept="application/pdf"
+             class="hidden"
+             (change)="upload($event)" />
+    </label>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-4 space-y-3 overflow-y-auto">
+    <div *ngIf="!filteredFiles.length" class="text-gray-500 text-sm">
+      Keine Befunde gefunden.
+    </div>
+
+    <div *ngFor="let file of filteredFiles" class="flex items-center justify-between border-b pb-2">
+      <span class="text-sm">{{ file.name }}</span>
+
+      <button class="text-[#2D6A6A] text-sm"
+              (click)="open(file)">
+        Öffnen
+      </button>
+    </div>
+  </div>
+</div>

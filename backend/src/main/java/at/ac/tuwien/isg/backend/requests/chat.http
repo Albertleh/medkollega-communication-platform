@@ -1,0 +1,45 @@
+GET http://localhost:8080/api/v1/patient/a072e741-a328-42d6-9f86-604bc2e15309/chat
+Authorization: Bearer {{token}}
+###
+
+POST http://localhost:8080/api/v1/patient/fad42759-fcd5-4824-bebb-01b3a6f28236/chat
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "patientId": "01e4f019-69f4-4163-812c-db5bb5b82f8d",
+    "professionalId": "27224239-9c4a-4d10-a728-f7773e6bdba7"
+}
+
+###
+
+GET http://localhost:8080/api/v1/chatRequest
+Authorization: Bearer {{token}}
+
+###
+POST http://localhost:8080/api/v1/chatRequest/read
+Authorization: Bearer {{token}}
+
+###
+POST http://localhost:8080/api/v1/chatRequest/6bac3fe6-59ab-4260-a646-476a2c548e75/accept
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "patientId": "77e9b63d-e66c-4908-a2e8-85576dffdbe5"
+}
+
+###
+GET http://localhost:8080/api/v1/unreadMessages
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:8080/api/v1/user?patientId=fad42759-fcd5-4824-bebb-01b3a6f28236
+Authorization: Bearer {{token}}
+
+
+###
+GET http://localhost:8080/api/v1/patient/a072e741-a328-42d6-9f86-604bc2e15309/groupChat
+Authorization: Bearer {{token}}
+###

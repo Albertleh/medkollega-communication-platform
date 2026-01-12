@@ -1,0 +1,149 @@
+<div class="bg-white p-4 rounded-2xl shadow-md h-full flex flex-col">
+
+  <!-- HEADER -->
+  <div class="flex items-center justify-between mb-3 flex-shrink-0">
+    <h2 class="text-xl font-semibold">Medikation</h2>
+    <span class="text-xs text-gray-400">{{ medications.length }} Einträge</span>
+  </div>
+
+  <!-- SCROLLBEREICH -->
+  <div class="flex-1 overflow-y-auto pr-1 relative
+            [box-shadow:inset_0_-6px_6px_-6px_rgba(0,0,0,0.12)]">
+
+    <div *ngIf="loading" class="text-sm text-gray-500 mb-3">Lädt…</div>
+
+    <div *ngIf="!loading && medications.length === 0" class="text-sm text-gray-500 mb-3">
+      Keine Medikationseinträge vorhanden.
+    </div>
+
+    <div *ngFor="let m of filteredMedications" class="p-4 border rounded-xl bg-white mb-3 shadow-sm">
+
+      <!-- Header -->
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">
+            {{ m.medication }}
+          </h3>
+
+          <div *ngIf="m.note" class="text-xs text-gray-500 mt-1">
+            Notiz:
+            <span class="text-gray-800 font-semibold">{{ m.note }}</span>
+          </div>
+        </div>
+
+        <button
+          class="text-xs text-red-600 hover:text-red-800 transition"
+          (click)="deleteMedication(m.id)"
+        >
+          Löschen
+        </button>
+      </div>
+
+      <!-- Dosierung -->
+      <div class="grid grid-cols-4 gap-2 text-center mb-3">
+        <div class="bg-gray-100 rounded-lg p-2">
+          <div class="text-xs text-gray-500">Morgens</div>
+          <div class="text-lg font-semibold">{{ displayDose(m.morning) }}</div>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg p-2">
+          <div class="text-xs text-gray-500">Mittags</div>
+          <div class="text-lg font-semibold">{{ displayDose(m.midday) }}</div>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg p-2">
+          <div class="text-xs text-gray-500">Abends</div>
+          <div class="text-lg font-semibold">{{ displayDose(m.evening) }}</div>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg p-2">
+          <div class="text-xs text-gray-500">Nachts</div>
+          <div class="text-lg font-semibold">{{ displayDose(m.night) }}</div>
+        </div>
+      </div>
+
+      <div class="text-xs text-gray-400">
+        Erstellt: {{ m.createdAt | date:'dd.MM.yyyy' }}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FIXE EINGABE UNTEN (WIE CHAT) -->
+  <div class="pt-3 border-t mt-auto flex-shrink-0 bg-white">
+
+    <label class="block text-md font-bold text-gray-700 mb-2">
+      Neue Medikation
+    </label>
+
+    <!-- ZEILE 1: MEDIKAMENT + NOTIZ -->
+    <div class="flex gap-3 mb-3">
+      <input
+        type="text"
+        [(ngModel)]="newMedName"
+        placeholder="Medikament"
+        class="flex-1 border rounded-lg p-2.5 text-sm"
+      />
+
+      <input
+        type="text"
+        [(ngModel)]="newMedNote"
+        placeholder="Notiz"
+        class="flex-1 border rounded-lg p-2.5 text-sm"
+      />
+    </div>
+
+    <!-- ZEILE 2: DOSIERUNGEN + BUTTON -->
+<div class="flex items-end gap-3">
+
+  <div class="grid grid-cols-4 gap-3 flex-1">
+    <div>
+      <label class="block text-xs font-medium text-gray-500 mb-1">Morgens</label>
+      <input
+        type="number"
+        [(ngModel)]="newMedMorning"
+        class="w-full border rounded-lg p-2.5 text-sm"
+        placeholder="0"
+      />
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-gray-500 mb-1">Mittags</label>
+      <input
+        type="number"
+        [(ngModel)]="newMedNoon"
+        class="w-full border rounded-lg p-2.5 text-sm"
+        placeholder="0"
+      />
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-gray-500 mb-1">Abends</label>
+      <input
+        type="number"
+        [(ngModel)]="newMedEvening"
+        class="w-full border rounded-lg p-2.5 text-sm"
+        placeholder="0"
+      />
+    </div>
+
+    <div>
+      <label class="block text-xs font-medium text-gray-500 mb-1">Nachts</label>
+      <input
+        type="number"
+        [(ngModel)]="newMedNight"
+        class="w-full border rounded-lg p-2.5 text-sm"
+        placeholder="0"
+      />
+    </div>
+  </div>
+
+  <button
+    (click)="createMedicationEntry()"
+    class="h-[42px] px-4 py-2 rounded-lg text-sm font-medium text-white
+           bg-[#2D6A6A] hover:bg-[#245757] transition shrink-0"
+  >
+    Speichern
+  </button>
+
+</div>

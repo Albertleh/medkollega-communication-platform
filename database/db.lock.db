@@ -1,0 +1,6 @@
+#FileLock
+#Tue Nov 04 16:52:02 UTC 2025
+hostName=fedora
+id=19a4fc85530c7231c80e3f62535fc1668b6af199256
+method=file
+server=192.168.0.135\:36227

@@ -1,0 +1,20 @@
+POST http://{{host}}/api/v1/authentication
+Content-Type: application/json
+
+{
+    "password": "password",
+    "email": "user@email.com"
+}
+
+> {% client.global.set("auth_token", response.body); %}
+
+###
+
+GET http://{{host}}/api/v1/groups/8da8ff61-360d-4b4f-8271-74b3cb0b0cb6
+Authorization: Bearer {{auth_token}}
+
+###
+
+GET http://{{host}}/api/v1/groups?onlyJoined=true
+Authorization: Bearer {{auth_token}}
+

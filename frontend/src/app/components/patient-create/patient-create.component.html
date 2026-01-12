@@ -1,0 +1,52 @@
+<div class="fixed inset-0 bg-black/30 flex items-center justify-center z-[9999] backdrop-blur-sm ">
+  <div class="bg-white rounded-xl p-6 w-[480px] space-y-4 shadow-lg">
+
+    <h2 class="font-bold text-lg">Neuen Patienten anlegen</h2>
+
+    <input class="w-full border p-2 rounded" [(ngModel)]="newPatient.firstName" placeholder="Vorname">
+    <input class="w-full border p-2 rounded" [(ngModel)]="newPatient.lastName" placeholder="Nachname">
+    <div>
+    <label class="block text-xs font-medium text-gray-400 mb-1">
+        SV-Nummer (4-stellig)
+    </label>
+
+    <input
+        type="text"
+        inputmode="numeric"
+        maxlength="4"
+        pattern="[0-9]{4}"
+        class="w-full border rounded-lg px-3 py-2 text-sm tracking-widest
+            focus:outline-none focus:ring-2 focus:ring-[#2D6A6A]
+            focus:border-[#2D6A6A]"
+        [(ngModel)]="newPatient.insuranceNumber"
+        placeholder="0000"
+    />
+    </div>
+    <div>
+        <label class="block text-xs font-medium text-gray-400 mb-1">
+        Geburtsdatum
+        </label>
+        <input type="date" class="w-full border p-2 rounded" [(ngModel)]="newPatient.dateOfBirth">
+    </div>
+    
+
+    <input class="w-full border p-2 rounded" [(ngModel)]="newPatient.zipCode" placeholder="PLZ">
+    <input class="w-full border p-2 rounded" [(ngModel)]="newPatient.city" placeholder="Ort">
+    <input class="w-full border p-2 rounded" [(ngModel)]="newPatient.streetName" placeholder="Straße">
+    <input class="w-full border p-2 rounded" [(ngModel)]="newPatient.streetNumber" placeholder="Nr">
+
+    <textarea class="w-full border p-2 rounded h-24"
+              [(ngModel)]="newPatient.description"
+              placeholder="Beschreibung"></textarea>
+
+    <div class="flex justify-end gap-2 pt-4">
+      <button class="px-4 py-2 bg-gray-200 rounded" (click)="close.emit()">
+        Abbrechen
+      </button>
+      <button class="px-4 py-2 bg-[#2D6A6A] text-white rounded" (click)="save()">
+        Erstellen
+      </button>
+    </div>
+
+  </div>
+</div>

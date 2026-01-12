@@ -1,0 +1,34 @@
+POST http://localhost:8080/api/v1/authentication
+Content-Type: application/json
+
+{
+    "password": "password",
+    "email": "doctor@email.com"
+}
+
+> {%
+    client.global.set("token", response.body);   // save token globally
+%}
+
+
+###
+GET http://localhost:8080/api/v1/user/contact
+Authorization: Bearer {{token}}
+
+###
+PUT http://localhost:8080/api/v1/user/contact
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "Hubert",
+  "lastName": "Hubertus",
+  "zipCode": "1111",
+  "city": "GRAZ",
+  "placesAvailable": true
+}
+
+###
+
+GET http://localhost:8080/api/v1/user?search=Lukas
+Authorization: Bearer {{token}}

@@ -1,0 +1,59 @@
+POST http://localhost:8080/api/v1/authentication
+Content-Type: application/json
+
+{
+    "password": "password",
+    "email": "internist@email.com"
+}
+
+> {%
+    client.global.set("token", response.body);   // save token globally
+%}
+
+###
+GET http://localhost:8080/api/v1/patients
+Authorization: Bearer {{token}}
+###
+GET http://localhost:8080/api/v1/patients/fabe8228-9599-498b-baf5-94ffe1b7de30
+Authorization: Bearer {{token}}
+###
+
+
+
+POST http://localhost:8080/api/v1/patients
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "insuranceNumber": "2344",
+    "dateOfBirth": "2002-02-22",
+    "firstName": "apiCreated",
+    "lastName": "Demopatient",
+    "zipCode": "1040",
+    "city": "Wien",
+    "streetName": "wer",
+    "streetNumber": "aef"
+}
+
+###
+
+PUT http://localhost:8080/api/v1/patients/2373220b-4998-4365-8d8d-291df5250461
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "insuranceNumber": "1234",
+    "dateOfBirth": "2000-01-01",
+    "firstName": "cAHNGE",
+    "lastName": "ASDF",
+    "zipCode": "1111",
+    "city": "ASDF",
+    "streetName": "ASDF",
+    "streetNumber": "ASDF"
+}
+
+###
+GET http://localhost:8080/api/v1/patients/last
+Authorization: Bearer {{token}}

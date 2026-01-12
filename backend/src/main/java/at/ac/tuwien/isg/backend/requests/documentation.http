@@ -1,0 +1,104 @@
+POST http://localhost:8080/api/v1/authentication
+Content-Type: application/json
+
+{
+    "password": "password",
+    "email": "doctor@email.com"
+}
+
+> {%
+    client.global.set("token", response.body);   // save token globally
+%}
+
+
+###
+
+GET http://localhost:8080/api/v1/patient/5b72f0c4-9622-4dcb-994e-a30d22809e10/textEntry
+Authorization: Bearer {{token}}
+
+###
+
+POST http://localhost:8080/api/v1/patient/94bfcfdd-7689-48aa-a8d4-7d5f10f80869/textEntry
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "text": "Starker Husten seit 5 Tagen, Fieber seit gestern Abend mit Spitzen bei 40°C."
+
+}
+
+###
+
+PUT http://localhost:8080/api/v1/patient/fabe8228-9599-498b-baf5-94ffe1b7de30/textEntry/01a57368-05a6-48e3-9bd4-596014050c09
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "text": "Pat beschreibt strake Halsschmerzen. Befund: Tonsillen gerötet, weiß belegt, Belag nicht abkratzbar. Diagnose: akute Angina Tonsillaris. Therapie: Amoxicillin 1g 1-0-1 für 7 Tage. Vorstellung bei keiner deutlichen Verbesserung nach zwei Tagen. Schmerzmittel bei Bedarf: Ibuprofen 300mg maximal 3 x täglich."
+
+}
+
+###
+
+DELETE http://localhost:8080/api/v1/patient/fabe8228-9599-498b-baf5-94ffe1b7de30/textEntry/01a57368-05a6-48e3-9bd4-596014050c09
+Authorization: Bearer {{token}}
+
+
+
+###
+GET http://localhost:8080/api/v1/patient/5b72f0c4-9622-4dcb-994e-a30d22809e10/medication
+Authorization: Bearer {{token}}
+
+###
+POST http://localhost:8080/api/v1/patient/fabe8228-9599-498b-baf5-94ffe1b7de30/medication
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "medication": "Ibuprofen 300g",
+    "morning": "0",
+    "midday": "0",
+    "evening": "0",
+    "night": "0",
+    "note": "bei Bedarf bis 3x täglich"
+
+}
+
+###
+DELETE http://localhost:8080/api/v1/patient/fabe8228-9599-498b-baf5-94ffe1b7de30/medication/c40c465e-30d6-430d-9fbc-6bbb3a973c30
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+###
+GET http://localhost:8080/api/v1/patient/812e2abf-1f88-4570-b51a-d116b2877478/diagnosis
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:8080/api/v1/patient/812e2abf-1f88-4570-b51a-d116b2877478/diagnosis/past
+Authorization: Bearer {{token}}
+
+###
+POST http://localhost:8080/api/v1/patient/fabe8228-9599-498b-baf5-94ffe1b7de30/diagnosis
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "diagnosisText": "Depression",
+    "icdCode": "F32.0"
+}
+
+###
+
+POST http://localhost:8080/api/v1/patient/fabe8228-9599-498b-baf5-94ffe1b7de30/diagnosis/bc4312ce-edcd-415e-b69f-cddf726e5414/past
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "validUntil": "2022-02-19"
+}
+
+###
+DELETE  http://localhost:8080/api/v1/patient/fabe8228-9599-498b-baf5-94ffe1b7de30/diagnosis/07bb6c92-4f91-4e29-8833-2a90d220548c
+Authorization: Bearer {{token}}
+Content-Type: application/json

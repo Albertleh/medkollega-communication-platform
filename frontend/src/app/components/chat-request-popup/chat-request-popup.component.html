@@ -1,0 +1,97 @@
+<div class="fixed top-14 right-6 z-50 w-[380px]">
+
+  <div class="bg-white rounded-xl shadow-xl p-4 border">
+
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-lg font-semibold">
+        Neue Chatanfragen
+      </div>
+
+      <button class="text-gray-500 hover:text-black" (click)="closeModal()">
+        ✕
+      </button>
+    </div>
+
+    <div *ngIf="loading" class="text-center py-4 text-gray-400">
+      Lädt...
+    </div>
+
+    <div *ngIf="!loading && requests.length === 0"
+         class="text-center text-gray-400 py-4">
+      Keine offenen Anfragen
+    </div>
+
+    <div *ngFor="let r of requests"
+         class="border rounded-lg p-3 mb-3">
+
+      <!-- SV Nummer -->
+      <div class="font-semibold mb-1">
+        Patient SV:
+        {{ r.patientInsuranceNumber }}
+        {{ r.patientDateOfBirth | date:'ddMMyy' }}
+      </div>
+
+      <!-- Anfrage Info -->
+      <div class="text-sm text-gray-600 mb-2">
+        Anfrage von: {{ r.senderFirstName }} {{ r.senderLastName }}
+        ({{ r.senderProfessionalRoleUser }})
+      </div>
+
+      <!-- Existiert der Patient? -->
+      <div class="flex items-center gap-2 mt-1">
+
+        <!-- Avatar NUR wenn Patient existiert -->
+        <ng-container *ngIf="patientExists(r); else newPatient">
+          
+          <app-avatar
+            class="w-9 h-9 mr-2"
+            [first]="getExistingPatient(r)?.firstName"
+            [last]="getExistingPatient(r)?.lastName">
+          </app-avatar>
+
+          <div class="flex flex-col leading-tight">
+            <span class="text-green-600 font-medium text-sm">
+              Patient existiert 
+            </span>
+
+            <span class="text-gray-700 text-sm">
+              {{ getExistingPatient(r)?.firstName }}
+              {{ getExistingPatient(r)?.lastName }}
+            </span>
+          </div>
+
+        </ng-container>
+
+        <!-- Neuer Patient -->
+        <ng-template #newPatient>
+          <span class="text-orange-400 text-sm">
+            Neuer Patient ✚
+          </span>
+        </ng-template>
+
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-2 mt-3">
+        
+        <button
+          type="button"
+          class="px-3 py-1 rounded bg-red-100 text-red-700"
+          (click)="reject(r)">
+          Ablehnen
+        </button>
+
+        <button
+          type="button"
+          class="px-3 py-1 rounded bg-green-600 text-white"
+          (click)="accept(r)">
+          Annehmen
+        </button>
+
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

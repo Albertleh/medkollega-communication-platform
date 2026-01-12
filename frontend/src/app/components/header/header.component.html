@@ -1,0 +1,107 @@
+<nav *ngIf="!hideHeader()" class="w-full border-b border-gray-200 bg-light-blue-400">
+  <div class="mx-auto flex h-16 items-center justify-between px-6">
+
+    <!-- Left: Logo -->
+    <div class="flex items-center space-x-3" routerLink="home">
+      <img
+        src="/assets/medkollega_logo_transparent.png"
+        class="h-8 w-auto"
+        alt="Medkollega"
+        
+      />
+    </div>
+
+    <!-- Center: Navigation -->
+    <div class="flex items-center space-x-8">
+      <!-- HOME -->
+      <a
+        routerLink="home"
+        class="text-md font-medium text-black no-underline hover:underline"
+        routerLinkActive="active-nav"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Home
+      </a>
+
+
+
+      <!-- PATIENTEN -->
+      <a
+        routerLink="patients"
+        class="text-md font-medium text-black visited:text-black no-underline hover:underline"
+        routerLinkActive="active-nav"
+      >
+        Patienten
+      </a>
+
+    </div>
+
+    <div class="flex items-center space-x-2">
+
+      <!-- Add User (with badge) -->
+      <button
+        class="relative p-1 px-2 rounded-md text-black hover:bg-jet-black-100"
+        (click)="toggleChatRequestPopup()"
+      >
+        <span class="material-symbols-rounded text-3xl">
+          person_add
+        </span>
+
+        <!-- BLAUER BADGE-PUNKT -->
+        <span
+          *ngIf="openRequestCount > 0"
+          class="absolute top-1 right-1 w-3 h-3 rounded-full bg-blue-600 border-2 border-white">
+        </span>
+      </button>
+
+
+
+
+      <!-- USER MENU BUTTON -->
+      <div class="relative">
+        <button
+          class="text-black hover:bg-jet-black-100 p-1 rounded-md outline-none"
+          (click)="toggleMenu()"
+        >
+          <span class="material-symbols-rounded text-3xl">
+            person
+          </span>
+        </button>
+
+        <!-- DROPDOWN -->
+        <div
+          *ngIf="isMenuOpen"
+          class="absolute right-0 mt-1 w-55 rounded-lg border border-gray-200 bg-white shadow-md z-50"
+        >
+
+          <button
+            (click)="goTo('account')"
+            class="flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-jet-black-50"
+          >
+            <span class="material-icons-outlined text-base">account_circle</span>
+            Kontenübersicht
+          </button>
+
+          <button
+            (click)="logout()"
+            class="flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-jet-black-50"
+          >
+            <span class="material-icons-outlined text-base">logout</span>
+            Ausloggen
+          </button>
+
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+</nav>
+
+<app-chat-request-popup
+  *ngIf="showChatRequestPopup"
+  (close)="closeChatRequestPopup()">
+</app-chat-request-popup>
+
+

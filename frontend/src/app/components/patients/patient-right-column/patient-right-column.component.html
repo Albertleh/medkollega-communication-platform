@@ -1,0 +1,288 @@
+<div class="absolute right-0 top-0 h-full border-l border-gray-200 bg-white flex flex-col py-4 px-4 transition-all duration-300 ease-in-out"
+  [ngStyle]="{
+    width: selectedChatType ? '24rem' : '20rem',
+    transform: 'translateX(0)'
+  }"
+>
+
+  <ng-container *ngIf="!selectedChatType">
+
+    <div class="mb-4">
+      <h4 class="text-sm font-medium text-gray-500 tracking-wide">
+        Beteiligte Ärzte
+      </h4>
+    </div>
+
+    <div *ngIf="loading" class="text-sm text-gray-400 mb-2 animate-pulse">
+      Lade Chats...
+    </div>
+
+    <!-- DIRECT CHATS -->
+    <div class="flex-1 overflow-y-auto space-y-2 pr-1">
+      <div *ngIf="!loading && directChats.length === 0" class="text-sm text-gray-400 mb-2 italic">
+        Noch keine Arztchats vorhanden
+      </div>
+
+      <div
+        *ngFor="let chat of directChats"
+        (click)="openDirectChat(chat)"
+        class="group flex items-center gap-3 p-2 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:shadow-sm"
+      >
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-semibold text-base
+                    group-hover:bg-[#2D6A6A] group-hover:text-white">
+          {{ chat.partnerFirstName.charAt(0) }}
+        </div>
+
+        <div class="flex flex-col leading-tight">
+          <span class="text-gray-900 font-medium text-sm">
+            {{ chat.partnerFirstName }} {{ chat.partnerLastName }}
+          </span>
+          <span class="text-xs text-gray-500">
+            {{ chat.partnerRole }}
+          </span>
+
+          <!-- status hint -->
+          <span
+            *ngIf="!chat.accepted"
+            class="text-[11px] text-amber-700"
+          >
+            {{ chat.createdByMe ? 'Wartet auf Annahme' : 'Anfrage offen' }}
+          </span>
+        </div>
+
+        <!-- right side: unread + pending + chevron -->
+        <div class="ml-auto flex items-center gap-2">
+          <span
+            *ngIf="chat.unreadMessages > 0"
+            class="text-[11px] px-2 py-0.5 rounded-full bg-[#2D6A6A] text-white"
+          >
+            {{ chat.unreadMessages }}
+          </span>
+
+          <span
+            *ngIf="!chat.accepted"
+            class="text-[11px] px-2 py-0.5 rounded-full border border-amber-300 bg-amber-50 text-amber-700"
+          >
+            {{ chat.createdByMe ? 'Wartet' : 'Offen' }}
+          </span>
+
+          <span class="material-icons text-gray-300 text-base">chevron_right</span>
+        </div>
+      </div>
+
+      <!-- GROUP CHATS SECTION -->
+      <div class="pt-4">
+        <h4 class="text-sm font-medium text-gray-500 tracking-wide mb-2">
+          Gruppenchats
+        </h4>
+
+        <div *ngIf="!loading && groupChats.length === 0" class="text-sm text-gray-400 mb-2 italic">
+          Noch keine Gruppenchats vorhanden
+        </div>
+
+        <div
+          *ngFor="let gc of groupChats"
+          (click)="openGroupChat(gc)"
+          class="group flex items-center gap-3 p-2 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:shadow-sm"
+        >
+          <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-semibold text-base
+                      group-hover:bg-[#2D6A6A] group-hover:text-white">
+            {{ gc.name?.charAt(0) || 'G' }}
+          </div>
+
+          <div class="flex flex-col leading-tight">
+            <span class="text-gray-900 font-medium text-sm">
+              {{ gc.name }}
+            </span>
+            <span class="text-xs text-gray-500">
+              {{ gc.members?.length || 0 }} Mitglieder
+            </span>
+          </div>
+
+          <span class="ml-auto material-icons text-gray-300 text-base">chevron_right</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-auto pt-4 space-y-2 border-t border-gray-200">
+      <button
+        (click)="openCreateDoctorModal()"
+        class="w-full rounded-xl py-2.5 text-sm font-medium border">
+        + Neuer Arztchat
+      </button>
+
+      <button
+        (click)="openCreateGroupModal()"
+        class="w-full rounded-xl py-2.5 text-sm font-medium border">
+        + Neuer Gruppenchat
+      </button>
+    </div>
+
+  </ng-container>
+
+  <!-- OPEN CHAT VIEW -->
+  <ng-container *ngIf="selectedChatType">
+
+    <!-- HEADER -->
+    <div
+      class="flex items-center gap-2 mb-3"
+      [class.cursor-pointer]="selectedChatType === 'group'"
+      (click)="selectedChatType === 'group' && selectedGroupChat && toggleGroupMembers()"
+    >
+      <span
+        class="material-icons cursor-pointer text-gray-500 bg"
+        (click)="$event.stopPropagation(); closeChat()"
+      >
+        arrow_back
+      </span>
+
+      <div class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-50 hover:border hover:border-gray-100 rounded-2xl hover:shadow-sm">
+        <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+          <ng-container *ngIf="selectedChatType === 'direct' && selectedDirectChat">
+            {{ selectedDirectChat.partnerFirstName.charAt(0) }}
+          </ng-container>
+          <ng-container *ngIf="selectedChatType === 'group' && selectedGroupChat">
+            {{ selectedGroupChat.name?.charAt(0) || 'G' }}
+          </ng-container>
+        </div>
+
+        <div class="flex-1">
+          <div class="font-medium text-sm" *ngIf="selectedChatType === 'direct' && selectedDirectChat">
+            {{ selectedDirectChat.partnerFirstName }} {{ selectedDirectChat.partnerLastName }}
+
+            <!-- accepted status in header -->
+            <div
+              class="text-xs mt-0.5"
+              [class.text-green-600]="selectedDirectChat.accepted"
+              [class.text-amber-700]="!selectedDirectChat.accepted"
+            >
+              {{ selectedDirectChat.accepted ? 'Akzeptiert' : (selectedDirectChat.createdByMe ? 'Wartet auf Annahme' : 'Anfrage offen') }}
+            </div>
+          </div>
+
+          <div class="font-medium text-sm" *ngIf="selectedChatType === 'group' && selectedGroupChat">
+            {{ selectedGroupChat.name }}
+          </div>
+
+          <div class="text-xs text-gray-500" *ngIf="selectedChatType === 'group' && selectedGroupChat">
+            {{ selectedGroupChat.members?.length || 0 }} Mitglieder
+          </div>
+        </div>
+
+        <span *ngIf="selectedChatType === 'group'" class="material-icons text-gray-400">
+          {{ showGroupMembers ? 'expand_less' : 'expand_more' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- DIRECT: not accepted banner -->
+    <div
+      *ngIf="selectedChatType === 'direct' && selectedDirectChat && !selectedDirectChat.accepted"
+      class="mb-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+    >
+      <div class="font-medium mb-1">Chat noch nicht akzeptiert</div>
+      <div class="text-xs opacity-80">
+        {{ selectedDirectChat.createdByMe
+          ? 'Die andere Person muss den Chat noch annehmen. Sobald sie akzeptiert, kannst du schreiben.'
+          : 'Dieser Chat ist noch offen. Sobald akzeptiert wurde, kannst du schreiben.' }}
+      </div>
+    </div>
+
+    <!-- GROUP MEMBERS -->
+    <div
+      *ngIf="selectedChatType === 'group' && selectedGroupChat && showGroupMembers"
+      class="mb-3 border rounded-2xl bg-white"
+    >
+      <div class="px-4 py-2 text-xs font-medium text-gray-500 border-b">
+        Mitglieder
+      </div>
+
+      <div class="max-h-48 overflow-y-auto">
+        <div
+          *ngFor="let m of selectedGroupChat.members"
+          class="flex items-center gap-3 px-4 py-2 border-b last:border-b-0"
+        >
+          <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-semibold text-gray-700 text-sm">
+            {{ m.partnerFirstName?.charAt(0) || '?' }}
+          </div>
+
+          <div class="flex flex-col leading-tight">
+            <div class="text-sm font-medium text-gray-900">
+              {{ m.partnerFirstName }} {{ m.partnerLastName }}
+            </div>
+            <div class="text-xs text-gray-500">
+              {{ m.partnerRole }}
+            </div>
+          </div>
+
+          <div class="ml-auto text-xs"
+               [class.text-green-600]="m.accepted"
+               [class.text-gray-400]="!m.accepted">
+            {{ m.accepted ? 'akzeptiert' : 'offen' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div #scrollContainer class="flex-1 overflow-y-auto space-y-3 bg-gray-50 p-3 rounded-xl">
+      <div *ngFor="let msg of messages" [class.text-right]="msg.sentByMe">
+
+        <div class="inline-block max-w-[75%]">
+          <!-- sender label nur bei group + nicht von mir -->
+          <div *ngIf="selectedChatType === 'group' && !msg.sentByMe" class="text-[11px] text-gray-500 mb-1">
+            {{ msg.senderFirstName }} {{ msg.senderLastName }}
+          </div>
+
+          <div
+            class="px-3 py-2 text-sm rounded-2xl"
+            [class.bg-jet-black-700]="msg.sentByMe"
+            [class.text-white]="msg.sentByMe"
+            [class.bg-gray-200]="!msg.sentByMe"
+          >
+            {{ msg.content }}
+            <div class="text-[10px] opacity-50 mt-1">
+              {{ msg.createdAt | date:'HH:mm' }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="mt-2 flex items-center gap-2">
+      <input
+        [(ngModel)]="newMessage"
+        class="flex-1 border rounded-xl px-3 py-2 text-sm"
+        placeholder="Nachricht schreiben..."
+        (keydown.enter)="sendMessage(); $event.preventDefault()"
+        [disabled]="selectedChatType === 'direct' && selectedDirectChat && !selectedDirectChat.accepted"
+      />
+
+      <button
+        (click)="sendMessage()"
+        class="bg-jet-black-700 text-white px-4 py-2 rounded-xl disabled:opacity-50"
+        [disabled]="selectedChatType === 'direct' && selectedDirectChat && !selectedDirectChat.accepted"
+      >
+        →
+      </button>
+    </div>
+
+  </ng-container>
+
+</div>
+
+<app-create-doctor-chat-modal
+  *ngIf="showCreateDoctorModal"
+  [patientId]="patientId"
+  (close)="closeCreateDoctorModal()"
+  (created)="onChatCreated($event)">
+</app-create-doctor-chat-modal>
+
+<app-create-group-chat-modal
+  *ngIf="showCreateGroupModal"
+  [patientId]="patientId"
+  (close)="closeCreateGroupModal()"
+  (created)="onGroupChatCreated($event)">
+</app-create-group-chat-modal>

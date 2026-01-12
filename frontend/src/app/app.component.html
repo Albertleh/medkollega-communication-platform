@@ -1,0 +1,45 @@
+<!-- LOGIN ROUTE: ONLY ROUTER -->
+<ng-container *ngIf="isLoginRoute">
+  <router-outlet></router-outlet>
+</ng-container>
+
+<!-- APP LAYOUT (non-login routes) -->
+<ng-container *ngIf="!isLoginRoute">
+
+  <app-header></app-header>
+
+  <div class="flex w-full h-[calc(100vh-64px)] overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <div class="relative transition-all duration-300"
+         [class.w-72]="isSidebarOpen"
+         [class.w-0]="!isSidebarOpen">
+
+      <app-left-sidebar
+        #sidebar
+        *ngIf="authService.isLoggedIn()"
+        [isOpen]="isSidebarOpen"
+        class="h-full"
+        (patientSelected)="onPatientSelected($event)">
+      </app-left-sidebar>
+
+      <button
+        (click)="toggleSidebar()"
+        class="absolute top-24 -right-8 z-50
+               w-8 h-12 flex items-center justify-center
+               rounded-r-full border bg-white shadow">
+        <span class="material-symbols-rounded">
+          {{ isSidebarOpen ? 'chevron_left' : 'chevron_right' }}
+        </span>
+      </button>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-1 bg-neutral-100 overflow-y-auto">
+      <router-outlet (activate)="onRouteActivate($event)"></router-outlet>
+    </div>
+
+  </div>
+
+</ng-container>

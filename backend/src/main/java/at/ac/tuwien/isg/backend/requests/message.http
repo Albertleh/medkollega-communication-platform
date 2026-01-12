@@ -1,0 +1,18 @@
+GET http://localhost:8080/api/v1/patient/fc009a6d-875d-4cb8-8aec-729c8cdea54f/chat/f1b408b6-0760-4e6c-b12c-ee94441f3448/message
+Authorization: Bearer {{token}}
+
+###
+
+POST http://localhost:8080/api/v1/patient/fc009a6d-875d-4cb8-8aec-729c8cdea54f/chat/f1b408b6-0760-4e6c-b12c-ee94441f3448/message
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "text": "Lieber Max, ich wollte nachfragen wie du die Patientin in den letzten Wochen erlebst, bemerke starke Steigerung der Symptomatik."
+}
+
+###
+
+POST http://localhost:8080/api/v1/patient/fad42759-fcd5-4824-bebb-01b3a6f28236/chat/158abc7a-6083-444f-9062-6e0c42be1146/message/read
+Authorization: Bearer {{token}}
+Content-Type: application/json

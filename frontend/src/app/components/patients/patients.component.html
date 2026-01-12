@@ -1,0 +1,178 @@
+<!-- PATIENT VIEW -->
+<div *ngIf="hasRouteId && patient; else noPatient"
+     class="flex flex-col h-full w-full overflow-hidden">
+
+  <!-- HEADER: LINKS Name + Search + Tabs | RECHTS involvierte Ärzte -->
+  <div class="bg-white border-b flex-shrink-0">
+    <div class="flex items-center px-6 py-3">
+
+      <!-- LINKS-BLOCK: Patient + Search + Tabs -->
+      <div class="flex items-center gap-6">
+
+        <!-- Patient -->
+        <div class="flex items-center gap-3">
+          <app-avatar
+            [first]="patient.firstName"
+            [last]="patient.lastName"
+          ></app-avatar>
+
+          <div class="flex flex-col leading-tight">
+            <h1 class="text-base font-bold mb-0 mt-1">
+              {{ patient.firstName }} {{ patient.lastName }}
+            </h1>
+            <h2 class="text-sm text-gray-600 mt-0">
+              SV: {{ patient.insuranceNumber }}-{{ patient.dateOfBirth | date:'ddMMyy' }}
+            </h2>
+          </div>
+          <button
+            (click)="openEditPatient()"
+            class="ml-1 mt-1 flex items-center justify-center h-7 w-7 rounded-full
+                  border border-gray-300 text-gray-600 hover:text-[#2D6A6A]
+                  hover:border-[#2D6A6A] transition-all shadow-sm hover:shadow"
+            title="Edit patient"
+          >
+            <span class="material-icons text-base">edit</span>
+          </button>
+        </div>
+
+        <!-- Search -->
+        <div>
+          <input 
+            type="text"
+            placeholder="Search ..."
+            [(ngModel)]="searchTerm"
+            class="w-48 rounded-lg border border-jet-black-300 bg-white py-2 px-3 text-sm
+                  focus:border-jet-black-400 focus:ring-jet-black-400 focus:ring-2 focus:outline-none"
+          />
+
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex items-center gap-2 bg-gray-100 rounded-xl p-1 shadow-inner">
+
+          <button
+            (click)="activeTab = 'text'"
+            class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
+            [class.bg-white]="activeTab === 'text'"
+            [class.text-[#2D6A6A]]="activeTab === 'text'"
+            [class.shadow]="activeTab === 'text'"
+            [class.text-gray-500]="activeTab !== 'text'"
+          >
+            Textdokumentation
+          </button>
+
+          <button
+            (click)="activeTab = 'medikation'"
+            class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
+            [class.bg-white]="activeTab === 'medikation'"
+            [class.text-[#2D6A6A]]="activeTab === 'medikation'"
+            [class.shadow]="activeTab === 'medikation'"
+            [class.text-gray-500]="activeTab !== 'medikation'"
+          >
+            Medikation
+          </button>
+
+          <button
+            (click)="activeTab = 'diagnose'"
+            class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
+            [class.bg-white]="activeTab === 'diagnose'"
+            [class.text-[#2D6A6A]]="activeTab === 'diagnose'"
+            [class.shadow]="activeTab === 'diagnose'"
+            [class.text-gray-500]="activeTab !== 'diagnose'"
+          >
+            Diagnose
+          </button>
+
+          <button
+            (click)="activeTab = 'befunde'"
+            class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
+            [class.bg-white]="activeTab === 'befunde'"
+            [class.text-[#2D6A6A]]="activeTab === 'befunde'"
+            [class.shadow]="activeTab === 'befunde'"
+            [class.text-gray-500]="activeTab !== 'befunde'"
+          >
+            Befunde
+          </button>
+
+
+        </div>
+      </div>
+
+  
+
+    </div>
+  </div>
+
+
+
+  <!-- MAIN 3-COLUMN LAYOUT -->
+  <div class="flex flex-row flex-1 overflow-hidden">
+
+    <!-- CENTER COLUMN -->
+    <div class="flex-1 p-3 overflow-hidden bg-gray-50">
+      <ng-container *ngIf="patient">
+
+        <app-text-documentation
+          *ngIf="activeTab === 'text'"
+          [patientId]="patient.id"
+          [search]="searchTerm"
+          >
+        </app-text-documentation>
+
+        <app-medication
+          *ngIf="activeTab === 'medikation'"
+          [patientId]="patient.id"
+          [search]="searchTerm"
+          >
+        </app-medication>
+
+        <app-diagnosis
+          *ngIf="activeTab === 'diagnose'"
+          [patientId]="patient.id"
+          [search]="searchTerm">
+        </app-diagnosis>
+
+        <app-findings
+          *ngIf="activeTab === 'befunde'"
+          [patientId]="patient.id"
+          [search]="searchTerm"
+        >
+        </app-findings>
+
+      </ng-container>
+    </div>
+
+    <!-- PATIENT RIGHT COLUMN -->
+
+    <app-patient-right-column
+      class="flex-shrink-0 border-l bg-white relative transition-[width] duration-300 ease-in-out"
+      [ngClass]="isChatOpen ? 'w-96 min-w-[24rem]' : 'w-80 min-w-[20rem]'"
+      [patientId]="patient.id"
+      (chatOpen)="isChatOpen = true"
+      (chatClose)="onChatClose()"
+      [openChatId]="openChatId">
+    </app-patient-right-column>
+
+
+
+  </div>
+</div>
+
+<!-- FALLBACK: KEIN PATIENT AUSGEWÄHLT -->
+<ng-template #noPatient>
+  <div class="flex items-center justify-center h-full w-full bg-neutral-100">
+    <img
+      src="assets/medkollega_logo_transparent.png"
+      alt="MedKollega Logo"
+      class="w-[480px] opacity-10 select-none"
+    />
+  </div>
+</ng-template>
+
+<app-patient-edit
+  *ngIf="editMode"
+  [patient]="editablePatient"
+  (close)="cancelEdit()"
+  (updated)="onPatientUpdated($event)">
+</app-patient-edit>
+

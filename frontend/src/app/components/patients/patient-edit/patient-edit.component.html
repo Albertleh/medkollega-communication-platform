@@ -1,0 +1,94 @@
+<div class="fixed inset-0 bg-black/30 flex items-center justify-center z-50 backdrop-blur-sm">
+  <div class="bg-white rounded-xl p-6 w-[640px] space-y-5 shadow-lg">
+
+    <h2 class="font-bold text-lg">Patient bearbeiten</h2>
+
+
+
+    <!-- ========================= -->
+    <!-- EDITABLE SECTION -->
+    <!-- ========================= -->
+    <div class="grid grid-cols-2 gap-4">
+
+      <!-- First Name -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Vorname</label>
+        <input class="w-full border p-2 rounded"
+               [(ngModel)]="editablePatient.firstName">
+      </div>
+
+      <!-- Last Name -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Nachname</label>
+        <input class="w-full border p-2 rounded"
+               [(ngModel)]="editablePatient.lastName">
+      </div>
+
+      <!-- Insurance Number -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Versicherungsnummer</label>
+        <input type="number" class="w-full border p-2 rounded"
+               [(ngModel)]="editablePatient.insuranceNumber">
+      </div>
+
+      <!-- Date of Birth -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Geburtsdatum</label>
+        <input type="date" class="w-full border p-2 rounded"
+               [(ngModel)]="editablePatient.dateOfBirth">
+      </div>
+
+      <!-- ZIP Code -->
+      <div>
+        <label class="block text-sm font-medium mb-1">PLZ</label>
+        <input class="w-full border p-2 rounded"
+               [(ngModel)]="editablePatient.zipCode">
+      </div>
+
+      <!-- City -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Ort</label>
+        <input class="w-full border p-2 rounded"
+               [(ngModel)]="editablePatient.city">
+      </div>
+
+      <!-- Street Name -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Straße</label>
+        <input class="w-full border p-2 rounded"
+               [(ngModel)]="editablePatient.streetName">
+      </div>
+
+      <!-- Street Number -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Hausnummer</label>
+        <input class="w-full border p-2 rounded"
+               [(ngModel)]="editablePatient.streetNumber">
+      </div>
+
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Beschreibung</label>
+      <textarea class="w-full border p-2 rounded h-24"
+                [(ngModel)]="editablePatient.description"></textarea>
+    </div>
+
+    <!-- ========================= -->
+    <!-- ACTION BUTTONS -->
+    <!-- ========================= -->
+    <div class="flex justify-end gap-2 pt-4">
+      <button class="px-4 py-2 bg-gray-200 rounded"
+              (click)="close.emit()">
+        Abbrechen
+      </button>
+
+      <button class="px-4 py-2 bg-[#2D6A6A] text-white rounded"
+              (click)="save()">
+        Speichern
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="w-full h-full px-14 py-20 bg-gray-50">
+
+  <!-- HEADER -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800">
+        {{ greeting }}, {{ userName }}
+      </h1>
+      <p class="text-gray-600 mt-1">
+        Du hast {{ unreadCount }} ungelesene Nachrichten
+      </p>
+    </div>
+
+    <button
+      *ngIf="unreadCount > 0"
+      (click)="markAllAsRead()"
+      class="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white hover:bg-blue-600">
+      Alle als gelesen markieren
+    </button>
+  </div>
+
+  <!-- SECTIONS -->
+  <ng-container *ngFor="let section of [
+    { title: 'Heute', list: todayMessages, empty: 'Keine ungelesenen Nachrichten heute.' },
+    { title: 'Gestern', list: yesterdayMessages, empty: 'Keine ungelesenen Nachrichten gestern.' },
+    { title: 'Diese Woche', list: weekMessages, empty: 'Keine ungelesenen Nachrichten diese Woche.' }
+  ]">
+
+    <h2 class="text-lg font-semibold text-gray-700 mb-2 mt-10 first:mt-0">
+      {{ section.title }}
+    </h2>
+
+    <div class="space-y-3">
+
+      <div *ngIf="section.list.length === 0"
+           class="text-gray-500 text-sm italic px-3 py-2 border rounded-md bg-white">
+        {{ section.empty }}
+      </div>
+
+      <div *ngFor="let msg of section.list"
+           (click)="openUnreadMessage(msg)"
+           class="flex items-center justify-between p-4 rounded-xl border bg-white hover:bg-gray-50 cursor-pointer">
+
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center font-semibold text-white"
+               [ngStyle]="{ 'background-color': msg.color }">
+            {{ msg.initials }}
+          </div>
+
+          <div>
+            <div class="font-medium text-gray-900">
+              {{ msg.senderName }}
+              <span class="text-gray-500 font-normal" *ngIf="msg.patientName">
+                – {{ msg.patientName }}
+              </span>
+            </div>
+            <div class="text-gray-500 text-sm truncate max-w-2xl">
+              {{ msg.preview }}
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span class="text-xs bg-gray-100 px-2 py-1 rounded">
+            {{ msg.time }}
+          </span>
+
+          <button
+            (click)="markAsRead(msg); $event.stopPropagation()"
+            class="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
+            Gelesen
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>
