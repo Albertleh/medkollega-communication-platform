@@ -5,7 +5,11 @@ Medkollega is a full-stack web application for healthcare professionals to coord
 ## Project description
 Medkollega is designed to streamline interdisciplinary communication in clinical settings. It provides patient records, 1:1 and group chats, and structured documentation entries so medical colleagues can share updates in context and keep care plans aligned.
 
+## From Conception to finished Application
 <img width="1079" height="571" alt="image" src="https://github.com/user-attachments/assets/03581007-3a2d-4274-b396-0ebeca72d1b8" />
+<img width="3024" height="1964" alt="image" src="https://github.com/user-attachments/assets/f039f15c-c52d-465b-af8f-2093185685e7" />
+<img width="3024" height="1964" alt="image" src="https://github.com/user-attachments/assets/30a08e79-4f55-4568-ac54-d5ce431702e3" />
+<img width="3024" height="1964" alt="image" src="https://github.com/user-attachments/assets/7abbd7fc-d38a-4e22-83b7-f25e406d5d25" />
 
 
 ## Frontend highlights
